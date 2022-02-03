@@ -11,6 +11,7 @@ function playAudio() {
         audio.play();
         isPlay = true;
        
+       
     }
     else if (isPlay == true) {
         audio.pause();
@@ -28,13 +29,13 @@ function playAudio() {
     }
   }
 
-  let arr = ["DuaLipa.mp3",'beyonce.mp3'];
+  let arr = ["DuaLipa.mp3",'beyonce.mp3','ZillaKami - Bleach (feat. Denzel Curry).mp3'];
 
 
   function playNext() { 
-     
+ 
     if (playNum <= arr.length-1) {
-        ++playNum;
+        playNum++;
         audio.src=`./audio/${arr[playNum]}`;
        isPlay = false;
        play.classList.add('stop');
@@ -48,7 +49,9 @@ function playAudio() {
           play.classList.add('stop');
           playAudio();
         }
+     
       
+       
     }
  
    
@@ -62,18 +65,23 @@ function playAudio() {
       }
     
     if (playNum < 0) {
-          playNum = 1;
+          playNum = arr.length-1;
           audio.src=`./audio/${arr[playNum]}`;
           isPlay = false;
           play.classList.add('stop');
           playAudio();
       }  
+     
+     
   }
+
  
+
   prev.addEventListener('click',playPrev)
   next.addEventListener('click',playNext);
   play.addEventListener('click',toggleBtn);
   play.addEventListener('click',playAudio);
+ 
   const audioPlayer = document.querySelector(".player-audio");
   const timeline = audioPlayer.querySelector(".timeline");
 timeline.addEventListener("click", e => {
@@ -100,10 +108,11 @@ setInterval(() => {
       seconds % 60
     ).padStart(2, 0)}`;
   }
+  const len = audioPlayer.querySelector(".time .length");
   audio.addEventListener(
-    "loadedmetadata",
+    "loadeddata",
     () => {
-      audioPlayer.querySelector(".time .length").textContent = timeSec(
+      len.textContent = timeSec(
         audio.duration
       );
       
@@ -115,7 +124,7 @@ setInterval(() => {
 
     
     audio.addEventListener(
-        "loadedmetadata",
+        "loadeddata",
         () => {
             
                if (playNum == 0) {
@@ -124,6 +133,9 @@ setInterval(() => {
                else if (playNum == 1) {
                    tag.textContent = 'Beyonce - Lemonade';
                    
+               }
+               else if (playNum == 2) {
+                 tag.textContent = 'ZillaKami - Bleach (feat. Denzel Curry)';
                }
                 
             
@@ -142,6 +154,11 @@ setInterval(() => {
         body.style.backgroundImage = 'url(./images/img/dontstartnow.png)';
         img.src = './images/img/dontstartnow.png'
       }
+      if (playNum == 2) {
+        body.style.backgroundImage = 'url(./images/img/dogboy.jpeg)';
+        img.src = './images/img/dogboy.jpeg'
+      }
+
       
   
    
@@ -149,4 +166,15 @@ setInterval(() => {
  next.addEventListener('click',addBackground);
  prev.addEventListener('click',addBackground);
 
+ audio.addEventListener('ended', function() {
+  playNext();
   
+
+})
+audio.addEventListener('ended',addBackground);
+audio.addEventListener('ended',addBackground);
+
+localStorage.setItem('tag','Dua Lipa - don\'t start now');
+localStorage.setItem('duration','3:23');
+len.textContent = localStorage.getItem('duration');
+tag.textContent = localStorage.getItem('tag');
